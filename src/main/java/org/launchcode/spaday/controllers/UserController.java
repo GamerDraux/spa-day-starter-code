@@ -33,18 +33,23 @@ public class UserController {
         model.addAttribute(user);
         model.addAttribute("name", user.getUsername());
         model.addAttribute("email",user.getEmail());
-        model.addAttribute("error", "Passwords Do Not " +
-                "Match");
+
         model.addAttribute("username", user.getUsername());
         model.addAttribute("email", user.getEmail());
         model.addAttribute("users", UserData.getAllUsers());
-        String empty= "";
-        if (!user.getPassword().equals(verify)|| user.getPassword().equals(empty)){
+        if (!user.getPassword().equals(verify)){
+            model.addAttribute("error", "Passwords Do Not " +
+                    "Match");
             return "user/add";
-        } else {
+        } else if (user.getPassword().equals("")) {
+            model.addAttribute("error", "Password cannot " +
+                    "be blank");
+            return "user/add";
+        }else{
             users.put(user.getId(), user);
             return "user/index";
         }
+
     }
 
     @GetMapping ("userDetails/{userId}")
